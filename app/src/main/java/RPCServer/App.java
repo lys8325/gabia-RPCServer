@@ -3,12 +3,20 @@
  */
 package RPCServer;
 
-public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
+import org.restlet.data.Protocol;
+import RPCServer.controller.VmRunActionController;
+import RPCServer.controller.VmStopActionController;
+import org.restlet.Application;
+import org.restlet.Component;
 
-    public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+public class App extends Application{
+    public static void main(String[] args) throws Exception {
+        Component component =  new Component();
+        component.getServers().add(Protocol.HTTP, 8889);
+
+        component.getDefaultHost().attach("/vmRunAction/{macAddress}", VmRunActionController.class);
+        component.getDefaultHost().attach("/vmStopAction/{macAddress}", VmStopActionController.class);
+
+        component.start();
     }
 }
