@@ -4,19 +4,37 @@
 package RPCServer;
 
 import org.restlet.data.Protocol;
+
+import RPCServer.controller.XMLServer;
 import RPCServer.controller.VmRunActionController;
 import RPCServer.controller.VmStopActionController;
+
+import org.apache.xmlrpc.server.PropertyHandlerMapping;
+import org.apache.xmlrpc.server.XmlRpcServer;
+import org.apache.xmlrpc.server.XmlRpcServerConfigImpl;
+import org.apache.xmlrpc.webserver.ServletWebServer;
+import org.apache.xmlrpc.webserver.WebServer;
+import org.apache.xmlrpc.webserver.XmlRpcServlet;
 import org.restlet.Application;
 import org.restlet.Component;
 
 public class App extends Application{
     public static void main(String[] args) throws Exception {
-        Component component =  new Component();
-        component.getServers().add(Protocol.HTTP, 8889);
+        // Component component =  new Component();
+        // component.getServers().add(Protocol.HTTP, 8889);
 
-        component.getDefaultHost().attach("/vmRunAction/{macAddress}", VmRunActionController.class);
-        component.getDefaultHost().attach("/vmStopAction/{macAddress}", VmStopActionController.class);
+        // component.getDefaultHost().attach("/vmRunAction/{macAddress}", VmRunActionController.class);
+        // component.getDefaultHost().attach("/vmStopAction/{macAddress}", VmStopActionController.class);
 
-        component.start();
+        // component.start();
+
+        WebServer webServer = new WebServer(8889);
+        XmlRpcServer xmlRpcServer = webServer.getXmlRpcServer();
+        PropertyHandlerMapping propertyHandlerMapping = new PropertyHandlerMapping();
+        
+        propertyHandlerMapping.addHandler("vmAction", XMLServer.class);
+        xmlRpcServer.setHandlerMapping(propertyHandlerMapping);
+
+        webServer.start();
     }
 }
