@@ -22,5 +22,6 @@ public class App extends Application{
         xmlRpcServer.setHandlerMapping(propertyHandlerMapping);
 
         webServer.start();
+        
     }
 }
